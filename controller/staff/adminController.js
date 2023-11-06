@@ -1,32 +1,28 @@
+const AsyncHandler = require("express-async-handler");
 const Admin = require("../../model/Staff/Admin");
+const generateToken = require("../../utils/generateToken");
+const verifyToken = require("../../utils/verifyToken");
 
-const registerAdmin = async (req, res) => {
+const registerAdmin = AsyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
-  try {
-    //check if email exist
-    adminFound = await Admin.findOne({ email });
-    if (adminFound) {
-      return res.status(400).json("Email is already exists!");
-    }
-
-    const newAdmin = await Admin.create({
-      name,
-      email,
-      password,
-    });
-
-    res.status(201).json({
-      status: "Success",
-      message: "Admin has been registered.",
-      data: newAdmin,
-    });
-  } catch (error) {
-    res.json({
-      status: "Failed",
-      error: error.message,
-    });
+  //check if email exist
+  adminFound = await Admin.findOne({ email });
+  if (adminFound) {
+    throw new Error("Admin exists");
   }
-};
+
+  const newAdmin = await Admin.create({
+    name,
+    email,
+    password,
+  });
+
+  res.status(201).json({
+    status: "Success",
+    message: "Admin has been registered.",
+    data: newAdmin,
+  });
+});
 
 const loginAdmin = async (req, res) => {
   const { email, password } = req.body;
@@ -35,7 +31,7 @@ const loginAdmin = async (req, res) => {
     const user = await Admin.findOne({ email });
     if (!user) {
       return res.status(404).json({
-        message: "User not found!",
+        message: "User no t found!",
       });
     }
 

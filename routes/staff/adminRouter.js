@@ -13,6 +13,7 @@ const {
   adminPublishResults,
   adminUnpublishResults,
 } = require("../../controller/staff/adminController");
+const isLogin = require("../../middlewares/isLogin");
 
 const adminRouter = express.Router();
 
