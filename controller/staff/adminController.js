@@ -10,7 +10,7 @@ const registerAdmin = AsyncHandler(async (req, res) => {
   if (adminFound) {
     throw new Error("Admin exists");
   }
-
+  //register
   const newAdmin = await Admin.create({
     name,
     email,
@@ -24,36 +24,33 @@ const registerAdmin = AsyncHandler(async (req, res) => {
   });
 });
 
-const loginAdmin = async (req, res) => {
+const loginAdmin = AsyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  try {
-    //find user
-    const user = await Admin.findOne({ email });
-    if (!user) {
-      return res.status(404).json({
-        message: "User no t found!",
-      });
-    }
-
-    if (user && (await user.verifyPassword(password))) {
-      return res.status(200).json({
-        success: true,
-        message: "Admin has logged in!",
-        data: user,
-      });
-    } else {
-      return res.status(401).json({
-        success: false,
-        message: "Passwords don't match",
-      });
-    }
-  } catch (error) {
-    res.json({
-      status: "Failed",
-      error: error.message,
+  //find user
+  const user = await Admin.findOne({ email });
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found!",
     });
   }
-};
+  if (user && (await user.verifyPassword(password))) {
+    const token = generateToken(user._id);
+
+    const verify = verifyToken(token);
+    return res.json({
+      success: true,
+      message: "Admin has logged in!",
+      data: generateToken(user._id),
+      user,
+      verify,
+    });
+  } else {
+    return res.json({
+      success: false,
+      message: "Passwords don't match",
+    });
+  }
+});
 
 const getAllAdmins = async (req, res) => {
   try {

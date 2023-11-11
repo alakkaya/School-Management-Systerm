@@ -1,5 +1,4 @@
 const express = require("express");
-const morgan = require("morgan");
 const {
   globalErrHandler,
   notFoundErr,
@@ -9,7 +8,6 @@ const adminRouter = require("../routes/staff/adminRouter");
 const app = express();
 
 //Middlewares
-app.use(morgan("dev"));
 app.use(express.json()); //pass incoming json data
 
 //Routes

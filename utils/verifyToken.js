@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
 
 const verifyToken = (token) => {
-  return jwt.verify(token, "anykey", (err, decoded) => {
+  return jwt.verify(token, "sms", (err, decoded) => {
     if (err) {
-      return false;
+      return {
+        msg: "Invalid token",
+      };
     } else {
       return decoded;
     }
