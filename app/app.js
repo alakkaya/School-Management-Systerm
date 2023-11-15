@@ -4,16 +4,15 @@ const {
   notFoundErr,
 } = require("../middlewares/globalErrHandler");
 const adminRouter = require("../routes/staff/adminRouter");
-
+const academicYearRouter = require("../routes/academics/academicYear");
 const app = express();
 
 //Middlewares
 app.use(express.json()); //pass incoming json data
 
 //Routes
-
-//Admin Routes
 app.use("/api/v1/admins/", adminRouter);
+app.use("/api/v1/academic-years/", academicYearRouter);
 
 //Error Middlewares
 app.use(notFoundErr);

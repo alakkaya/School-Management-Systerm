@@ -4,6 +4,11 @@ const Admin = require("../../model/Staff/Admin");
 const generateToken = require("../../utils/generateToken");
 const verifyToken = require("../../utils/verifyToken");
 const { hashPassword, isPasswordMatched } = require("../../utils/helpers");
+
+//@desc Register admin
+//@route POST /api/admins/registe
+//@access Private
+
 const registerAdmin = AsyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   //check if email exist
@@ -36,7 +41,6 @@ const loginAdmin = AsyncHandler(async (req, res) => {
     });
   }
   //verifyPassword
-
   const isMatched = await isPasswordMatched(password, user.password);
 
   if (!isMatched) {
@@ -62,10 +66,13 @@ const getAllAdmins = AsyncHandler(async (req, res) => {
   });
 });
 
+//@route GET /api/admins
+//with .popule method u can see the what is the created details. I mean u don't see only id's.
+
 const getAdminProfile = AsyncHandler(async (req, res) => {
-  const admin = await Admin.findById(req.userAuth._id).select(
-    "-password -createdAt -updatedAt"
-  );
+  const admin = await Admin.findById(req.userAuth._id)
+    .select("-password -createdAt -updatedAt")
+    .populate("academicYears");
   if (!admin) {
     throw new Error("Admin not found");
   } else {
@@ -85,8 +92,6 @@ const updateAdmin = AsyncHandler(async (req, res) => {
   if (emailExist) {
     throw new Error("This email is taken/exist");
   }
-
-  //hash password
 
   //check if user updating password
   if (password) {
