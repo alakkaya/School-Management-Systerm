@@ -27,5 +27,5 @@ const academicTermSchema = new Schema(
   { timestamps: true }
 );
 
-const AcademicTerm = mongoose.model("academicTermSchema");
+const AcademicTerm = mongoose.model("AcademicTerm", academicTermSchema);
 module.exports = AcademicTerm;
