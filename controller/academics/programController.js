@@ -33,7 +33,7 @@ exports.createProgram = AsyncHandler(async (req, res) => {
 exports.getAllPrograms = AsyncHandler(async (req, res) => {
   const programs = await Program.find();
   res.status(200).json({
-    length: classes.length,
+    length: programs.length,
     status: "success",
     message: "All programs fetched succesfully!",
     data: programs,
