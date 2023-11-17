@@ -40,7 +40,6 @@ const getAllAcademicTerms = AsyncHandler(async (req, res) => {
   });
 });
 
-//@desc Register admin
 //@route GET /api/academic-terms/:id
 //@access Private
 const getSingleAcademicTerm = AsyncHandler(async (req, res) => {

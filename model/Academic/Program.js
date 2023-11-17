@@ -10,7 +10,7 @@ const ProgramSchema = new Schema(
       required: true,
     },
     description: {
-      tyep: String,
+      type: String,
     },
     duration: {
       type: String,
@@ -25,7 +25,7 @@ const ProgramSchema = new Schema(
           this.name
             .split(" ")
             .map((name) => name[0])
-            .joim("")
+            .join("")
             .toUpperCase() +
           Math.floor(10 + Math.random() * 90) +
           Math.floor(10 + Math.random() * 90)
