@@ -12,7 +12,7 @@ const { hashPassword, isPasswordMatched } = require("../../utils/helpers");
 const registerAdmin = AsyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   //check if email exist
-  adminFound = await Admin.findOne({ email });
+  const adminFound = await Admin.findOne({ email });
   if (adminFound) {
     throw new Error("Admin exists");
   }

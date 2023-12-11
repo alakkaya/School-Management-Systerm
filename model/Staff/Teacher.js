@@ -27,7 +27,7 @@ const teacherSchema = new mongoose.Schema(
           Date.now().toString().slice(2, 4) +
           this.name
             .split(" ")
-            .map(name => name[0])
+            .map((name) => name[0])
             .join("")
             .toUpperCase()
         );
@@ -57,7 +57,9 @@ const teacherSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
-
+    //if u gonna have more record , you can use type: mongoose.Schema.Types.ObjectId,
+    //      ref: "ClassLevel",
+    //like that for program,classLevek,academicYEar,term ...
     program: {
       type: String,
     },
