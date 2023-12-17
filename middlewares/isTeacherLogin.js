@@ -10,7 +10,7 @@ const isTeacherLogin = async (req, res, next) => {
   //verify token
   const verifiedToken = verifyToken(token);
   if (verifiedToken) {
-    //find the admins
+    //find the teachers
     const user = await Teacher.findById(verifiedToken.id).select(
       "name email role"
     );

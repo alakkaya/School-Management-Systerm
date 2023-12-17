@@ -160,7 +160,7 @@ exports.teacherUpdateProfile = AsyncHandler(async (req, res) => {
 
 //@desc Admin updating teacher profile
 //@route PUT /api/v1/teachers/:teacherID/update/admin
-//@access private teacher only
+//@access private admin only
 exports.adminUpdateTeacher = AsyncHandler(async (req, res) => {
   const { program, classLevel, academicYear, subject } = req.body;
 
