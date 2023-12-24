@@ -25,6 +25,7 @@ exports.createSubject = AsyncHandler(async (req, res) => {
     description,
     duration,
     academicTerm,
+    programFound,
     createdBy: req.userAuth._id,
   });
   //push the program.
