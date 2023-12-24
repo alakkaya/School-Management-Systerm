@@ -243,9 +243,9 @@ exports.writeExam = AsyncHandler(async (req, res) => {
     throw new Error("You have already written this exam ");
   }
   //check if student suspended/withdrawn
-  if (studentFound.isWithdrawn || studentFound.isSuspended) {
-    throw new Error("You are suspended/withdrawn, you can't take this exan.");
-  }
+  // if (studentFound.isWithdrawn || studentFound.isSuspended) {
+  //   throw new Error("You are suspended/withdrawn, you can't take this exan.");
+  // }
 
   //build report object
   let correctAnswers = 0;
