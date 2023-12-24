@@ -209,9 +209,9 @@ exports.writeExam = AsyncHandler(async (req, res) => {
     throw new Error("Student is not found!");
   }
   //get Exam with populate to see questions
-  const examFound = await Exam.findById(req.params.examID).populate(
-    "questions"
-  );
+  const examFound = await Exam.findById(req.params.examID)
+    .populate("questions")
+    .populate("academicTerm");
   if (!examFound) {
     throw new Error("Exam is not found!");
   }
@@ -220,16 +220,17 @@ exports.writeExam = AsyncHandler(async (req, res) => {
   //get student's answer
   const studentAnswers = req.body.answers;
   //check if student answered all questions
+
   if (studentAnswers.length !== questions.length) {
     throw new Error("You have not answered all the questions!");
   }
   //check if student has already taken the exams
-  const studentFoundInExamResults = await ExamResults.findOne({
-    student: studentFound?._id,
-  });
-  if (studentFoundInExamResults) {
-    throw new Error("You have already written this exam ");
-  }
+  // const studentFoundInExamResults = await ExamResults.findOne({
+  //   student: studentFound?._id,
+  // });
+  // if (studentFoundInExamResults) {
+  //   throw new Error("You have already written this exam ");
+  // }
 
   //build report object
   let correctAnswers = 0;
@@ -284,26 +285,63 @@ exports.writeExam = AsyncHandler(async (req, res) => {
   }
 
   //generate exam result
-  const examResults = await ExamResults.create({
-    student: studentFound?._id,
-    exam: examFound?._id,
-    grade,
-    score,
-    status,
-    remarks,
-    classLevel: examFound?.classLevel,
-    academicTerm: examFound?.academicTerm,
-    academicYear: examFound?.academicYear,
-  });
+  // const examResults = await ExamResults.create({
+  //   student: studentFound?._id,
+  //   exam: examFound?._id,
+  //   grade,
+  //   score,
+  //   status,
+  //   remarks,
+  //   classLevel: examFound?.classLevel,
+  //   academicTerm: examFound?.academicTerm,
+  //   academicYear: examFound?.academicYear,
+  // });
 
   //push the results into student
-  studentFound.examResults.push(examResults?._id);
-  //save
-  await studentFound.save();
+  // studentFound.examResults.push(examResults?._id);
+  // //save
+  // await studentFound.save();
 
+  //promoting students
+  //promote student to level 200
+  if (
+    examFound.academicTerm.name === "3rd term" &&
+    status === "Passed" &&
+    studentFound?.currentClassLevel === "level 100"
+  ) {
+    //promote student to "level 200"
+    studentFound.classLevels.push("level 200");
+    studentFound.currentClassLevel = "level 200";
+    await studentFound.save();
+  }
+
+  //promote student to level 300
+  if (
+    examFound.academicTerm.name === "3rd term" &&
+    status === "Passed" &&
+    studentFound?.currentClassLevel === "level 200"
+  ) {
+    //promote student to "level 200"
+    studentFound.classLevels.push("level 300");
+    studentFound.currentClassLevel = "level 300";
+    await studentFound.save();
+  }
+
+  //promote student to level 400
+  if (
+    examFound.academicTerm.name === "3rd term" &&
+    status === "Passed" &&
+    studentFound?.currentClassLevel === "level 300"
+  ) {
+    //promote student to "level 200"
+    studentFound.classLevels.push("level 400");
+    studentFound.currentClassLevel = "level 400";
+    await studentFound.save();
+  }
   //send
   res.status(200).json({
     status: "success",
+    studentFound,
     correctAnswers,
     wrongAnswers,
     score,
@@ -311,6 +349,6 @@ exports.writeExam = AsyncHandler(async (req, res) => {
     status,
     remarks,
     answeredQuestions,
-    examResults,
+    // examResults,
   });
 });
