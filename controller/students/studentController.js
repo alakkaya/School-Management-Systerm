@@ -163,8 +163,16 @@ exports.studentUpdateProfile = AsyncHandler(async (req, res) => {
 //@access private admin only
 
 exports.adminUpdateStudent = AsyncHandler(async (req, res) => {
-  const { program, classLevels, academicYear, name, email, prefectName } =
-    req.body;
+  const {
+    program,
+    classLevels,
+    academicYear,
+    name,
+    email,
+    prefectName,
+    isSuspended,
+    isWithdrawn,
+  } = req.body;
 
   const studentFound = await Student.findById(req.params.studentID);
   if (!studentFound) {
@@ -181,6 +189,8 @@ exports.adminUpdateStudent = AsyncHandler(async (req, res) => {
         academicYear,
         program,
         prefectName,
+        isSuspended,
+        isWithdrawn,
       },
       $addToSet: {
         classLevels,
@@ -219,18 +229,23 @@ exports.writeExam = AsyncHandler(async (req, res) => {
   const questions = examFound.questions;
   //get student's answer
   const studentAnswers = req.body.answers;
-  //check if student answered all questions
 
+  //check if student answered all questions
   if (studentAnswers.length !== questions.length) {
     throw new Error("You have not answered all the questions!");
   }
+
   //check if student has already taken the exams
-  // const studentFoundInExamResults = await ExamResults.findOne({
-  //   student: studentFound?._id,
-  // });
-  // if (studentFoundInExamResults) {
-  //   throw new Error("You have already written this exam ");
-  // }
+  const studentFoundInExamResults = await ExamResults.findOne({
+    student: studentFound?._id,
+  });
+  if (studentFoundInExamResults) {
+    throw new Error("You have already written this exam ");
+  }
+  //check if student suspended/withdrawn
+  if (studentFound.isWithdrawn || studentFound.isSuspended) {
+    throw new Error("You are suspended/withdrawn, you can't take this exan.");
+  }
 
   //build report object
   let correctAnswers = 0;
@@ -285,22 +300,22 @@ exports.writeExam = AsyncHandler(async (req, res) => {
   }
 
   //generate exam result
-  // const examResults = await ExamResults.create({
-  //   student: studentFound?._id,
-  //   exam: examFound?._id,
-  //   grade,
-  //   score,
-  //   status,
-  //   remarks,
-  //   classLevel: examFound?.classLevel,
-  //   academicTerm: examFound?.academicTerm,
-  //   academicYear: examFound?.academicYear,
-  // });
+  const examResults = await ExamResults.create({
+    student: studentFound?._id,
+    exam: examFound?._id,
+    grade,
+    score,
+    status,
+    remarks,
+    classLevel: examFound?.classLevel,
+    academicTerm: examFound?.academicTerm,
+    academicYear: examFound?.academicYear,
+  });
 
   //push the results into student
-  // studentFound.examResults.push(examResults?._id);
-  // //save
-  // await studentFound.save();
+  studentFound.examResults.push(examResults?._id);
+  //save
+  await studentFound.save();
 
   //promoting students
   //promote student to level 200
@@ -338,17 +353,20 @@ exports.writeExam = AsyncHandler(async (req, res) => {
     studentFound.currentClassLevel = "level 400";
     await studentFound.save();
   }
+
+  //promote student to graduate
+  if (
+    examFound.academicTerm.name === "3rd term" &&
+    status === "Passed" &&
+    studentFound?.currentClassLevel === "level 400"
+  ) {
+    studentFound.isGraduated = true;
+    studentFound.yearGraduated = new Date();
+    await studentFound.save();
+  }
   //send
   res.status(200).json({
     status: "success",
-    studentFound,
-    correctAnswers,
-    wrongAnswers,
-    score,
-    grade,
-    status,
-    remarks,
-    answeredQuestions,
-    // examResults,
+    data: "You have submitted your exam. Check later for the results!",
   });
 });
