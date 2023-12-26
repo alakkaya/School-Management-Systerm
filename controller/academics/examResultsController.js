@@ -43,7 +43,7 @@ exports.checkExamResults = AsyncHandler(async (req, res) => {
 //@access Private - student only
 
 exports.getAllExamResults = AsyncHandler(async (req, res) => {
-  const results = await ExamResult.find();
+  const results = await ExamResult.find().select("exam").populate("exam");
   res.status(200).json({
     status: "success",
     message: "Exam results fetched !",
