@@ -301,7 +301,7 @@ exports.writeExam = AsyncHandler(async (req, res) => {
 
   //generate exam result
   const examResults = await ExamResults.create({
-    student: studentFound?._id,
+    studentID: studentFound?.studentId,
     exam: examFound?._id,
     grade,
     score,
