@@ -76,17 +76,40 @@ exports.getAllStudentsAdmin = AsyncHandler(async (req, res) => {
 //@access private students only
 
 exports.getStudentProfile = AsyncHandler(async (req, res) => {
-  const student = await Student.findById(req?.userAuth?._id).select(
-    "-password,-createdAt,-updatedAt"
-  );
+  const student = await Student.findById(req?.userAuth?._id)
+    .select("-password,-createdAt,-updatedAt")
+    .populate("examResults");
   if (!student) {
     throw new Error("Student not found ! ");
   }
+  //get student profile
+  const studentProfile = {
+    name: student?.name,
+    email: student?.email,
+    currentClassLevel: student?.currentClassLevel,
+    program: student?.program,
+    dateAdmitted: student?.dateAdmitted,
+    isSuspended: student?.isSuspended,
+    isWithdrawn: student?.isWithdrawn,
+    studentId: student?.studentId,
+    prefectName: student?.prefectName,
+  };
 
+  //get student exam results
+  const examResults = student?.examResults;
+  //current exam
+  const currentExamResult = examResults[examResults.length - 1];
+  //check if exam is published
+  const isPublished = currentExamResult?.isPublished;
+
+  //send response
   res.status(200).json({
     status: "success",
     message: "Student profile fetched succesfully!",
-    data: student,
+    data: {
+      studentProfile,
+      currentExamResult: isPublished ? currentExamResult : [],
+    },
   });
 });
 
