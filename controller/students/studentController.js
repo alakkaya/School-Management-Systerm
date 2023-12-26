@@ -4,6 +4,7 @@ const Exam = require("../../model/Academic/Exam");
 const ExamResults = require("../../model/Academic/ExamResults");
 const { hashPassword, isPasswordMatched } = require("../../utils/helpers");
 const generateToken = require("../../utils/generateToken");
+const Admin = require("../../model/Staff/Admin");
 
 //@desc Admin Register Student
 //@route POST /api/v1/students/admin/register
@@ -11,6 +12,11 @@ const generateToken = require("../../utils/generateToken");
 
 exports.adminRegisterStudent = AsyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
+  //find admin
+  const adminFound = await Admin.findById(req.userAuth._id);
+  if (!adminFound) {
+    throw new Error("Admin not found! ");
+  }
   //check student already exist
   const studentFound = await Student.findOne({ email });
   if (studentFound) {
@@ -24,6 +30,9 @@ exports.adminRegisterStudent = AsyncHandler(async (req, res) => {
     password: await hashPassword(password),
     createdBy: req.userAuth._id,
   });
+  //push student into admin
+  adminFound.students.push(newStudent?._id);
+  await adminFound.save();
   res.status(201).json({
     status: "Success",
     message: "Student registered succesfully.",

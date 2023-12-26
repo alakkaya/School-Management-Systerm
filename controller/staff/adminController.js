@@ -72,7 +72,13 @@ const getAllAdmins = AsyncHandler(async (req, res) => {
 const getAdminProfile = AsyncHandler(async (req, res) => {
   const admin = await Admin.findById(req.userAuth._id)
     .select("-password -createdAt -updatedAt")
-    .populate("academicYears");
+    .populate("academicYears")
+    .populate("academicTerms")
+    .populate("programs")
+    .populate("yearGroups")
+    .populate("classLevels")
+    .populate("students")
+    .populate("teachers");
   if (!admin) {
     throw new Error("Admin not found");
   } else {
