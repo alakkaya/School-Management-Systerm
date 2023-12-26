@@ -242,10 +242,10 @@ exports.writeExam = AsyncHandler(async (req, res) => {
   if (studentFoundInExamResults) {
     throw new Error("You have already written this exam ");
   }
-  //check if student suspended/withdrawn
-  // if (studentFound.isWithdrawn || studentFound.isSuspended) {
-  //   throw new Error("You are suspended/withdrawn, you can't take this exan.");
-  // }
+  // if student suspended/withdrawn
+  if (studentFound.isWithdrawn || studentFound.isSuspended) {
+    throw new Error("You are suspended/withdrawn, you can't take this exan.");
+  }
 
   //build report object
   let correctAnswers = 0;
@@ -310,6 +310,7 @@ exports.writeExam = AsyncHandler(async (req, res) => {
     classLevel: examFound?.classLevel,
     academicTerm: examFound?.academicTerm,
     academicYear: examFound?.academicYear,
+    answeredQuestions: answeredQuestions,
   });
 
   //push the results into student
