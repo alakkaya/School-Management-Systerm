@@ -14,7 +14,16 @@ exports.checkExamResults = AsyncHandler(async (req, res) => {
   const examResult = await ExamResult.findOne({
     studentID: student.studentId,
     _id: req.params.id,
-  });
+  })
+    .populate({
+      path: "exam",
+      populate: {
+        path: "questions",
+      },
+    })
+    .populate("classLevel")
+    .populate("academicTerm")
+    .populate("academicYear");
 
   // check if exam is published
   if (examResult?.isPublished === false) {
@@ -25,6 +34,7 @@ exports.checkExamResults = AsyncHandler(async (req, res) => {
     status: "success",
     message: "Exam Result fetched succesfully!",
     data: examResult,
+    student: student,
   });
 });
 
