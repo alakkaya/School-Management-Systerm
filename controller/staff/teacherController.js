@@ -74,12 +74,12 @@ exports.loginTeacher = AsyncHandler(async (req, res) => {
 //params comes after "/"" like /:id ---you have toprovide params
 //
 exports.getAllTeachersAdmin = AsyncHandler(async (req, res) => {
-  //for reach query string
-  const query = req.query;
-  const param = req.params;
-  const teachers = await Teacher.find()
-    .skip(req.query.skip)
-    .limit(req.query.limit);
+  //convert query string to number
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 8;
+  const skip = (page - 1) * limit;
+
+  const teachers = await Teacher.find().skip(skip).limit(limit);
   //get total records
   const total = await Teacher.countDocuments();
   res.status(200).json({
