@@ -74,9 +74,7 @@ exports.loginTeacher = AsyncHandler(async (req, res) => {
 //params comes after "/"" like /:id ---you have toprovide params
 //
 exports.getAllTeachersAdmin = AsyncHandler(async (req, res) => {
-  let TeachersQuery = Teacher.find({
-    name: { $regex: req.query.name, $options: "i" },
-  });
+  let TeachersQuery = Teacher.find();
   //convert query string to number
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 8;
@@ -84,6 +82,14 @@ exports.getAllTeachersAdmin = AsyncHandler(async (req, res) => {
   const total = await Teacher.countDocuments();
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
+
+  //filtering/searching
+  if (req.query.name) {
+    TeachersQuery = TeachersQuery.find({
+      name: { $regex: req.query.name, $options: "i" },
+    });
+  }
+
   //pagination results
   const pagination = {};
   //add next
