@@ -78,12 +78,31 @@ exports.getAllTeachersAdmin = AsyncHandler(async (req, res) => {
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 8;
   const skip = (page - 1) * limit;
-
-  const teachers = await Teacher.find().skip(skip).limit(limit);
-  //get total records
   const total = await Teacher.countDocuments();
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  //pagination results
+  const pagination = {};
+  //add next
+  if (endIndex < total) {
+    pagination.next = {
+      page: page + 1,
+      limit,
+    };
+  }
+
+  //add prev
+  if (startIndex > 0) {
+    pagination.prev = {
+      page: page - 1,
+      limit,
+    };
+  }
+  //execute query
+  const teachers = await Teacher.find().skip(skip).limit(limit);
   res.status(200).json({
     total,
+    pagination,
     results: teachers.length,
     status: "success",
     message: "All teachers fetched succesfully!",
