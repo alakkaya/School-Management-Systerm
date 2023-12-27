@@ -69,10 +69,22 @@ exports.loginTeacher = AsyncHandler(async (req, res) => {
 
 //@route GET /api/v1/teachers/admin
 //@access private admin only
-
+//          @info:
+//query string comes after "?" and it shows variable (if u provide or not our controller will run but for params it must)
+//params comes after "/"" like /:id ---you have toprovide params
+//
 exports.getAllTeachersAdmin = AsyncHandler(async (req, res) => {
-  const teachers = await Teacher.find();
+  //for reach query string
+  const query = req.query;
+  const param = req.params;
+  const teachers = await Teacher.find()
+    .skip(req.query.skip)
+    .limit(req.query.limit);
+  //get total records
+  const total = await Teacher.countDocuments();
   res.status(200).json({
+    total,
+    results: teachers.length,
     status: "success",
     message: "All teachers fetched succesfully!",
     data: teachers,
