@@ -17,12 +17,13 @@ const isLogin = require("../../middlewares/isLogin");
 const isAdmin = require("../../middlewares/isAdmin");
 const advancedResults = require("../../middlewares/advancedResults");
 const Admin = require("../../model/Staff/Admin");
+const isAuthenticated = require("../../middlewares/isAuthenticated");
 const adminRouter = express.Router();
 
 adminRouter.post("/register", registerAdmin);
 adminRouter.post("/login", loginAdmin);
 adminRouter.get("/", isLogin, advancedResults(Admin, "programs"), getAllAdmins);
-adminRouter.get("/profile", isLogin, isAdmin, getAdminProfile);
+adminRouter.get("/profile", isAuthenticated(Admin), isAdmin, getAdminProfile);
 adminRouter.put("/", isLogin, isAdmin, updateAdmin);
 adminRouter.delete("/:id", deleteAdmin);
 adminRouter.put("/suspend/teacher/:id", adminSuspendTeacher);
