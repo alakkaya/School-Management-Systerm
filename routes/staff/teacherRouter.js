@@ -23,7 +23,12 @@ teacherRouter.get(
   "/admin",
   isLogin,
   isAdmin,
-  advancedResults(Teacher),
+  advancedResults(Teacher, {
+    path: "examsCreated",
+    populate: {
+      path: "questions",
+    },
+  }),
   getAllTeachersAdmin
 );
 

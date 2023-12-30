@@ -58,12 +58,7 @@ const loginAdmin = AsyncHandler(async (req, res) => {
 });
 
 const getAllAdmins = AsyncHandler(async (req, res) => {
-  const admins = await Admin.find();
-  res.status(200).json({
-    status: "success",
-    message: "All admins fetched succesfully!",
-    data: admins,
-  });
+  res.status(200).json(res.results);
 });
 
 //@route GET /api/admins

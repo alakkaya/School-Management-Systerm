@@ -11,6 +11,10 @@ const advancedResults = (model, populate) => {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
+    //populate
+    if (populate) {
+      modelQuery = modelQuery.populate(populate);
+    }
     //filtering/searching
     if (req.query.name) {
       modelQuery = modelQuery.find({
