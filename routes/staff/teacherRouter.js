@@ -13,6 +13,7 @@ const isAdmin = require("../../middlewares/isAdmin");
 const isTeacherLogin = require("../../middlewares/isTeacherLogin");
 const isTeacher = require("../../middlewares/isTeacher");
 const advancedResults = require("../../middlewares/advancedResults");
+const Teacher = require("../../model/Staff/Teacher");
 const teacherRouter = express.Router();
 
 teacherRouter.post("/admin/register", isLogin, isAdmin, adminRegisterTeacher);
@@ -22,7 +23,7 @@ teacherRouter.get(
   "/admin",
   isLogin,
   isAdmin,
-  advancedResults(),
+  advancedResults(Teacher),
   getAllTeachersAdmin
 );
 
