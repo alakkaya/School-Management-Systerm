@@ -8,16 +8,23 @@ const {
 } = require("../../controller/academics/subjectController");
 const isAdmin = require("../../middlewares/isAdmin");
 const isLogin = require("../../middlewares/isLogin");
+const Admin = require("../../model/Staff/Admin");
+const roleRestriction = require("../../middlewares/roleRestriction");
+const isAuthenticated = require("../../middlewares/isAuthenticated");
 
 const subjectRouter = express.Router();
-subjectRouter.route("/:programID").post(isLogin, isAdmin, createSubject);
+subjectRouter
+  .route("/:programID")
+  .post(isAuthenticated(Admin), roleRestriction("admin"), createSubject);
 
-subjectRouter.route("/").get(isLogin, isAdmin, getAllSubjects);
+subjectRouter
+  .route("/")
+  .get(isAuthenticated(Admin), roleRestriction("admin"), getAllSubjects);
 
 subjectRouter
   .route("/:id")
-  .put(isLogin, isAdmin, updateSubject)
-  .get(isLogin, isAdmin, getSingleSubject)
-  .delete(isLogin, isAdmin, deleteSubject);
+  .put(isAuthenticated(Admin), roleRestriction("admin"), updateSubject)
+  .get(isAuthenticated(Admin), roleRestriction("admin"), getSingleSubject)
+  .delete(isAuthenticated(Admin), roleRestriction("admin"), deleteSubject);
 
 module.exports = subjectRouter;

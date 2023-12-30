@@ -23,14 +23,24 @@ const adminRouter = express.Router();
 
 adminRouter.post("/register", registerAdmin);
 adminRouter.post("/login", loginAdmin);
-adminRouter.get("/", isLogin, advancedResults(Admin, "programs"), getAllAdmins);
+adminRouter.get(
+  "/",
+  isAuthenticated(Admin),
+  advancedResults(Admin, "programs"),
+  getAllAdmins
+);
 adminRouter.get(
   "/profile",
   isAuthenticated(Admin),
   roleRestriction("admin"),
   getAdminProfile
 );
-adminRouter.put("/", isLogin, roleRestriction("admin"), updateAdmin);
+adminRouter.put(
+  "/",
+  isAuthenticated(Admin),
+  roleRestriction("admin"),
+  updateAdmin
+);
 adminRouter.delete("/:id", deleteAdmin);
 adminRouter.put("/suspend/teacher/:id", adminSuspendTeacher);
 adminRouter.put("/unsuspend/teacher/:id", adminUnsuspendTeacher);

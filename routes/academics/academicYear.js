@@ -8,25 +8,32 @@ const {
 } = require("../../controller/academics/academicYearController");
 const isAdmin = require("../../middlewares/isAdmin");
 const isLogin = require("../../middlewares/isLogin");
-
+const roleRestriction = require("../../middlewares/roleRestriction");
+const Admin = require("../../model/Staff/Admin");
+const isAuthenticated = require("../../middlewares/isAuthenticated");
 const academicYearRouter = express.Router();
 
-// academicYearRouter.post("/", isLogin, isAdmin, createAcademicYear);
-// academicYearRouter.get("/", isLogin, isAdmin, getAllAcademicYears);
+// academicYearRouter.post("/", isAuthenticated(Admin),
+//   roleRestriction("admin"), createAcademicYear);
+// // academicYearRouter.get("/", isAuthenticated(Admin),
+//   roleRestriction("admin"), getAllAcademicYears);
 
 academicYearRouter
   .route("/")
-  .post(isLogin, isAdmin, createAcademicYear)
-  .get(isLogin, isAdmin, getAllAcademicYears);
+  .post(isAuthenticated(Admin), roleRestriction("admin"), createAcademicYear)
+  .get(isAuthenticated(Admin), roleRestriction("admin"), getAllAcademicYears);
 
 academicYearRouter
   .route("/:id")
-  .put(isLogin, isAdmin, updateAcademicYear)
-  .get(isLogin, isAdmin, getSingleAcademicYear)
-  .delete(isLogin, isAdmin, deleteAcademicYear);
+  .put(isAuthenticated(Admin), roleRestriction("admin"), updateAcademicYear)
+  .get(isAuthenticated(Admin), roleRestriction("admin"), getSingleAcademicYear)
+  .delete(isAuthenticated(Admin), roleRestriction("admin"), deleteAcademicYear);
 
-// academicYearRouter.get("/:id", isLogin, isAdmin, getSingleAcademicYear);
-// academicYearRouter.put("/:id", isLogin, isAdmin, updateAcademicYear);
-// academicYearRouter.delete("/:id", isLogin, isAdmin, deleteAcademicYear);
+// academicYearRouter.get("/:id", isAuthenticated(Admin),
+//   roleRestriction("admin"), getSingleAcademicYear);
+// // academicYearRouter.put("/:id", isAuthenticated(Admin),
+//   roleRestriction("admin"), updateAcademicYear);
+// // academicYearRouter.delete("/:id", isAuthenticated(Admin),
+//   roleRestriction("admin"), deleteAcademicYear);
 
 module.exports = academicYearRouter;

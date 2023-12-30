@@ -18,7 +18,12 @@ const roleRestriction = require("../../middlewares/roleRestriction");
 const Admin = require("../../model/Staff/Admin");
 const studentRouter = express.Router();
 
-studentRouter.post("/admin/register", isLogin, isAdmin, adminRegisterStudent);
+studentRouter.post(
+  "/admin/register",
+  isAuthenticated(Admin),
+  roleRestriction("admin"),
+  adminRegisterStudent
+);
 studentRouter.post("/login", loginStudent);
 studentRouter.get(
   "/admin",
