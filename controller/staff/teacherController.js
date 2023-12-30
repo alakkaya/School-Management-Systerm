@@ -74,6 +74,7 @@ exports.loginTeacher = AsyncHandler(async (req, res) => {
 //params comes after "/"" like /:id ---you have toprovide params
 //
 exports.getAllTeachersAdmin = AsyncHandler(async (req, res) => {
+  console.log(req.res);
   let TeachersQuery = Teacher.find();
   //convert query string to number
   const page = Number(req.query.page) || 1;
@@ -107,16 +108,18 @@ exports.getAllTeachersAdmin = AsyncHandler(async (req, res) => {
       limit,
     };
   }
-  //execute query
-  const teachers = await TeachersQuery.find().skip(skip).limit(limit);
-  res.status(200).json({
-    total,
-    pagination,
-    results: teachers.length,
-    status: "success",
-    message: "All teachers fetched succesfully!",
-    data: teachers,
-  });
+
+  res.status(200).json(res.myData);
+  // //execute query
+  // const teachers = await TeachersQuery.find().skip(skip).limit(limit);
+  // res.status(200).json({
+  //   total,
+  //   pagination,
+  //   results: teachers.length,
+  //   status: "success",
+  //   message: "All teachers fetched succesfully!",
+  //   data: teachers,
+  // });
 });
 
 //@route GET /api/v1/teachers/:teacherID/admin
