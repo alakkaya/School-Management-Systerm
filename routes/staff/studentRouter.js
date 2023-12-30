@@ -9,9 +9,7 @@ const {
   adminUpdateStudent,
   writeExam,
 } = require("../../controller/students/studentController");
-const isLogin = require("../../middlewares/isLogin");
-const isAdmin = require("../../middlewares/isAdmin");
-const isStudent = require("../../middlewares/isStudent");
+
 const isAuthenticated = require("../../middlewares/isAuthenticated");
 const Student = require("../../model/Academic/Student");
 const roleRestriction = require("../../middlewares/roleRestriction");

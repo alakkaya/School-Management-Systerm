@@ -6,8 +6,7 @@ const {
   updateAcademicYear,
   deleteAcademicYear,
 } = require("../../controller/academics/academicYearController");
-const isAdmin = require("../../middlewares/isAdmin");
-const isLogin = require("../../middlewares/isLogin");
+
 const roleRestriction = require("../../middlewares/roleRestriction");
 const Admin = require("../../model/Staff/Admin");
 const isAuthenticated = require("../../middlewares/isAuthenticated");

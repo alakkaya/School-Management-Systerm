@@ -1,7 +1,5 @@
 const express = require("express");
 
-const isTeacher = require("../../middlewares/isTeacher");
-const isTeacherLogin = require("../../middlewares/isTeacherLogin");
 const {
   createExam,
   getAllExams,
@@ -9,7 +7,6 @@ const {
   updateExam,
 } = require("../../controller/academics/examController");
 const roleRestriction = require("../../middlewares/roleRestriction");
-const Admin = require("../../model/Staff/Admin");
 const isAuthenticated = require("../../middlewares/isAuthenticated");
 const Teacher = require("../../model/Staff/Teacher");
 const examRouter = express.Router();

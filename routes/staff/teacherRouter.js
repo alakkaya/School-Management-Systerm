@@ -8,10 +8,7 @@ const {
   teacherUpdateProfile,
   adminUpdateTeacher,
 } = require("../../controller/staff/teacherController");
-const isLogin = require("../../middlewares/isLogin");
-const isAdmin = require("../../middlewares/isAdmin");
-const isTeacherLogin = require("../../middlewares/isTeacherLogin");
-const isTeacher = require("../../middlewares/isTeacher");
+
 const advancedResults = require("../../middlewares/advancedResults");
 const Teacher = require("../../model/Staff/Teacher");
 const Admin = require("../../model/Staff/Admin");
@@ -46,7 +43,12 @@ teacherRouter.get(
   roleRestriction("admin"),
   getTeacherByAdmin
 );
-teacherRouter.get("/profile", isTeacherLogin, isTeacher, getTeacherProfile);
+teacherRouter.get(
+  "/profile",
+  isAuthenticated(Teacher),
+  roleRestriction("teacher"),
+  getTeacherProfile
+);
 teacherRouter.put(
   "/:teacherID/update",
   isAuthenticated(Teacher),

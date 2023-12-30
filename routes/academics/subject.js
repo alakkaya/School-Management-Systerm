@@ -6,8 +6,7 @@ const {
   updateSubject,
   deleteSubject,
 } = require("../../controller/academics/subjectController");
-const isAdmin = require("../../middlewares/isAdmin");
-const isLogin = require("../../middlewares/isLogin");
+
 const Admin = require("../../model/Staff/Admin");
 const roleRestriction = require("../../middlewares/roleRestriction");
 const isAuthenticated = require("../../middlewares/isAuthenticated");

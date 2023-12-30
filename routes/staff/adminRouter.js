@@ -13,8 +13,7 @@ const {
   adminPublishResults,
   adminUnpublishResults,
 } = require("../../controller/staff/adminController");
-const isLogin = require("../../middlewares/isLogin");
-const isAdmin = require("../../middlewares/isAdmin");
+
 const advancedResults = require("../../middlewares/advancedResults");
 const Admin = require("../../model/Staff/Admin");
 const isAuthenticated = require("../../middlewares/isAuthenticated");

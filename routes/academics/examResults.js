@@ -4,10 +4,7 @@ const {
   getAllExamResults,
   adminToggleExamResult,
 } = require("../../controller/academics/examResultsController");
-const isStudent = require("../../middlewares/isStudent");
-const isStudentLogin = require("../../middlewares/isStudentLogin");
-const isLogin = require("../../middlewares/isLogin");
-const isAdmin = require("../../middlewares/isAdmin");
+
 const roleRestriction = require("../../middlewares/roleRestriction");
 const Admin = require("../../model/Staff/Admin");
 const isAuthenticated = require("../../middlewares/isAuthenticated");

@@ -1,6 +1,5 @@
 const express = require("express");
-const isTeacherLogin = require("../../middlewares/isTeacherLogin");
-const isTeacher = require("../../middlewares/isTeacher");
+
 const {
   createQuestion,
   getAllQuestions,

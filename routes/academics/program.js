@@ -6,8 +6,7 @@ const {
   updateProgram,
   deleteProgram,
 } = require("../../controller/academics/programController");
-const isAdmin = require("../../middlewares/isAdmin");
-const isLogin = require("../../middlewares/isLogin");
+
 const roleRestriction = require("../../middlewares/roleRestriction");
 const Admin = require("../../model/Staff/Admin");
 const isAuthenticated = require("../../middlewares/isAuthenticated");
