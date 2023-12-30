@@ -14,34 +14,46 @@ const isAdmin = require("../../middlewares/isAdmin");
 const isStudent = require("../../middlewares/isStudent");
 const isAuthenticated = require("../../middlewares/isAuthenticated");
 const Student = require("../../model/Academic/Student");
+const roleRestriction = require("../../middlewares/roleRestriction");
+const Admin = require("../../model/Staff/Admin");
 const studentRouter = express.Router();
 
 studentRouter.post("/admin/register", isLogin, isAdmin, adminRegisterStudent);
 studentRouter.post("/login", loginStudent);
-studentRouter.get("/admin", isLogin, isAdmin, getAllStudentsAdmin);
-studentRouter.get("/:studentID/admin", isLogin, isAdmin, getStudentByAdmin);
+studentRouter.get(
+  "/admin",
+  isAuthenticated(Admin),
+  roleRestriction("admin"),
+  getAllStudentsAdmin
+);
+studentRouter.get(
+  "/:studentID/admin",
+  isAuthenticated(Admin),
+  roleRestriction("admin"),
+  getStudentByAdmin
+);
 studentRouter.get(
   "/profile",
   isAuthenticated(Student),
-  isStudent,
+  roleRestriction("student"),
   getStudentProfile
 );
 studentRouter.put(
   "/update",
-  isAuthenticated("Student"),
-  isStudent,
+  isAuthenticated(Student),
+  roleRestriction("student"),
   studentUpdateProfile
 );
 studentRouter.post(
   "/exam/:examID/write",
-  isAuthenticated("Student"),
-  isStudent,
+  isAuthenticated(Student),
+  roleRestriction("student"),
   writeExam
 );
 studentRouter.put(
   "/:studentID/update/admin",
-  isLogin,
-  isAdmin,
+  isAuthenticated(Student),
+  roleRestriction("admin"),
   adminUpdateStudent
 );
 module.exports = studentRouter;
