@@ -15,11 +15,14 @@ exports.createQuestion = AsyncHandler(async (req, res) => {
   if (!examFound) {
     throw new Error("Exam is not found!");
   }
+
   //check if question exists
+
   const questionExists = await Question.findOne({ question });
   if (questionExists) {
     throw new Error("question is already exists!");
   }
+
   //create question
   const questionCreated = await Question.create({
     question,
